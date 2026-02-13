@@ -79,12 +79,16 @@ This repository contains Claude Code skills. The README is automatically generat
     for skill in skills:
         name = skill['name']
         description = skill['description']
+        path = skill['path']
         command = generate_command(name, description)
 
         # Escape pipe characters in description
         description = description.replace('|', '\\|')
 
-        readme += f"| {name} | {description} | {command} |\n"
+        # Create markdown link to skill file
+        skill_link = f"[{name}]({path})"
+
+        readme += f"| {skill_link} | {description} | {command} |\n"
 
     # Add footer with timestamp
     timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
@@ -110,7 +114,8 @@ def main():
         if 'name' in frontmatter and 'description' in frontmatter:
             skills.append({
                 'name': frontmatter['name'],
-                'description': frontmatter['description']
+                'description': frontmatter['description'],
+                'path': str(skill_file)
             })
             print(f"Found skill: {frontmatter['name']}")
         else:
